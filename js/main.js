@@ -1,7 +1,9 @@
 addEventListener('load', function() {
     document.getElementById('play').addEventListener('click', 
     function(){
-        alert("Comença la partida");
+		var nom = prompt("Quin es el teu nom?");
+		console.log(nom);
+		
     });
 
     document.getElementById('options').addEventListener('click', 
