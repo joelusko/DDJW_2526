@@ -1,9 +1,11 @@
 addEventListener('load', function() {
     document.getElementById('play').addEventListener('click', 
     function(){
+
 		var nom = prompt("Quin es el teu nom?");
 		console.log(nom);
 		
+        window.location.assign("./html/game.html");
     });
 
     document.getElementById('options').addEventListener('click', 
