@@ -1,25 +1,22 @@
-addEventListener('load', function() {
-    document.getElementById('play').addEventListener('click', 
-    function(){
+import { jQuery as $ } from '../library/jquery-4.0.0.slim.module.min.js';
 
-		var nom = prompt("Quin es el teu nom?");
-		console.log(nom);
-		
+$(function() {
+    $('#play').on('click', function(){
+        var nom = prompt("Quin es el teu nom?");
+        console.log(nom);
+        
         window.location.assign("./html/game.html");
     });
 
-    document.getElementById('options').addEventListener('click', 
-    function(){
+    $('#options').on('click', function(){
         console.error("Opció no implementada");
     });
 
-    document.getElementById('saves').addEventListener('click', 
-    function(){
+    $('#saves').on('click', function(){
         console.error("Opció no implementada");
     });
 
-    document.getElementById('exit').addEventListener('click', 
-    function(){
+    $('#exit').on('click', function(){
         console.warn("No es pot sortir!");
     });
 });
