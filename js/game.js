@@ -22,7 +22,6 @@ function drawSVGCard(x, y, path) {
     if (img.complete && img.naturalWidth !== 0) {
         ctx.drawImage(img, x, y, cardWidth, cardHeight);
     } else {
-        // Mientras carga o si falla, dibujamos el contorno
         ctx.strokeStyle = "white";
         ctx.strokeRect(x, y, cardWidth, cardHeight);
     }
@@ -66,7 +65,6 @@ canvas.addEventListener('click', (event) => {
         }
     });
 });
-
-// IMPORTANTE: Ejecutar estas dos
+game.select();
 startGame();
 render();

@@ -62,7 +62,7 @@ addEventListener('load', function() {
     // Lógica para Salir (opcional)
     document.getElementById('exit').addEventListener('click', function(){
         if (confirm("Vols sortir de la página?")) {
-             window.close();
+             window.location.href = "about:blank";
         }
     });
 });

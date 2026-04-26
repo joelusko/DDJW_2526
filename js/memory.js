@@ -56,7 +56,7 @@ export var game = {
 	},
 	
 	setupUI: function(){
-		const gameDiv = document.getElementById('');
+		const gameDiv = document.getElementById('ui-info');
 		
 		this.timeDisplay = document.createElement('div');
 		this.timeDisplay.style.fontSize = "20px";
@@ -111,7 +111,7 @@ export var game = {
 			}
 			
 			this.items = resources.slice();          
-            shuffe(this.items);
+            shuffle(this.items);
 
 			let numGroups = this.maxGroups;
             this.items = this.items.slice(0, numGroups);
@@ -122,7 +122,7 @@ export var game = {
 			}
 			
             this.items = totalCards;
-            shuffe(this.items);
+            shuffle(this.items);
             
             this.groupsOfCards = numGroups; // Actualizamos cuántos grupos hay que encontrar
             this.states = new Array(this.items.length).fill(StateCard.ENABLE);
@@ -149,6 +149,7 @@ export var game = {
 		
 		alert(`¡Nivel ${this.level}!`);
 		
+		if (this.timerInterval) clearInterval(this.timerInterval);
 		this.select();
 		this.start();
 	},
@@ -186,6 +187,7 @@ export var game = {
 			if (this.groupsOfCards <= 0) {
 				if(this.mode === 1){ //MODO 1, acaba la partida
 					alert(`Has ganado con ${this.score} puntos!`);
+					this.saveScore();
 					window.location.assign("../");
 				} else { //MODO 2, salta al siguiente nivel
 					setTimeout(() => {
@@ -204,8 +206,6 @@ export var game = {
                 cardsToFlipBack.forEach(i => this.goBack(i)); // Da la vuelta a todas todas las cartas clickadas
                 this.ready = this.items.length; 
             }, 1000);
-			
-			this.score -= 25; // Penalización
             if (this.score <= 0) {
                 alert("Game Over:(");
                 window.location.assign("../");
@@ -231,7 +231,7 @@ export var game = {
     }
 }
 
-function shuffe(arr){
+function shuffle(arr){
     arr.sort(function () {return Math.random() - 0.5});
 }
 
