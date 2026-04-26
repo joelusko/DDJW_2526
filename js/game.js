@@ -1,4 +1,4 @@
-import { game, selectCards, clickCard, startGame } from "./memory.js";
+import { game, startGame, clickCard } from "./memory.js";
 
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
@@ -13,35 +13,38 @@ const imageCache = {};
 function drawSVGCard(x, y, path) {
     if (!imageCache[path]) {
         const img = new Image();
+        img.onload = () => { /* Forzar render cuando cargue la imagen */ };
         img.src = path;
         imageCache[path] = img;
     }
 
     const img = imageCache[path];
-
-    if (img.complete) {
+    if (img.complete && img.naturalWidth !== 0) {
         ctx.drawImage(img, x, y, cardWidth, cardHeight);
     } else {
-        ctx.fillStyle = '#ccc';
-        ctx.fillRect(x, y, cardWidth, cardHeight);
-        img.onload = () => {};
+        // Mientras carga o si falla, dibujamos el contorno
+        ctx.strokeStyle = "white";
+        ctx.strokeRect(x, y, cardWidth, cardHeight);
     }
 }
+
 function render() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    game.items.forEach((item, i) => {
-        const row = Math.floor(i / cardsPerRow);
-        const col = i % cardsPerRow;
-        const x = margin + col * (cardWidth + margin);
-        const y = margin + row * (cardHeight + margin);
+    if (game.items && game.items.length > 0) {
+        game.items.forEach((item, i) => {
+            const row = Math.floor(i / cardsPerRow);
+            const col = i % cardsPerRow;
+            const x = margin + col * (cardWidth + margin);
+            const y = margin + row * (cardHeight + margin);
 
-        if (game.states[i] === 1) { 
-            drawSVGCard(x, y, '../resources/back.svg');
-        } else {
-            drawSVGCard(x, y, item); 
-        }
-    });
+            if (game.states[i] === 1) { 
+                drawSVGCard(x, y, '../resources/back.svg');
+            } else {
+                drawSVGCard(x, y, item); 
+            }
+        });
+    }
 
     requestAnimationFrame(render);
 }
@@ -63,5 +66,7 @@ canvas.addEventListener('click', (event) => {
         }
     });
 });
+
+// IMPORTANTE: Ejecutar estas dos
 startGame();
-requestAnimationFrame(render);
+render();
