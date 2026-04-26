@@ -1,16 +1,74 @@
-<!DOCTYPE html> 
-<html>
-	<head>
-		<script src="./js/main.js"></script>
-		<link rel="stylesheet" 
-			href="./styles/main.css">
-		<title> Memory - Menú </title>
-	</head>
-	<body>
-		<h1 id="title">Menú</h1>
-		<button id="play" class="center"> Jugar </button>
-		<button id="options" class="center"> Opcions </button>
-		<button id="saves" class="center"> Partides </button>
-		<button id="exit" class="center"> Sortir </button>
-	</body>
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <title>Memory - Menú Principal</title>
+    <script src="js/main.js" type="module"></script>
+    <style>
+        body {
+            background-color: #222;
+            color: white;
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .menu-container {
+            background-color: #333;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            text-align: center;
+            width: 350px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .btn-play { background-color: #4CAF50; color: white; }
+        .btn-secondary { background-color: #555; color: white; }
+        
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            border-bottom: 1px solid #555;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-container">
+        <h1>Memory Game</h1>
+        
+        <button id="play-m1" class="btn-play">Jugar Modo 1 (Nivel Único)</button>
+        <button id="play-m2" class="btn-play">Jugar Modo 2 (Progresivo)</button>
+        
+        <button id="options" class="btn-secondary">Opciones</button>
+        <button id="saves" class="btn-secondary">Cargar Partida</button>
+        <button id="exit" class="btn-secondary">Salir</button>
+
+        <h2>Top 10 Rànquing</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Puntos</th>
+                    <th>Nivel</th>
+                </tr>
+            </thead>
+            <tbody id="ranking-body">
+                </tbody>
+        </table>
+    </div>
+</body>
 </html>

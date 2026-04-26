@@ -1,22 +1,69 @@
-import { jQuery as $ } from '../library/jquery-4.0.0.slim.module.min.js';
+addEventListener('load', function() {
+    //Mostrar el Ranking al cargar la página 
+    const rankingBody = document.getElementById('ranking-body');
+    const ranking = JSON.parse(localStorage.getItem('ranking') || "[]");
+    
+    ranking.forEach((entry, index) => {
+        const row = `<tr>
+            <td>${index + 1}</td>
+            <td>${entry.user}</td>
+            <td>${entry.points}</td>
+            <td>${entry.level || 1}</td>
+        </tr>`;
+        rankingBody.innerHTML += row;
+    });
 
-$(function() {
-    $('#play').on('click', function(){
-        var nom = prompt("Quin es el teu nom?");
-        console.log(nom);
+    //Lógica para elegir modo de juego 
+    function iniciarJuego(modo) {
+        const nom = prompt("Quin es el teu nom?"); // 
+        if (!nom) return;
         
+        sessionStorage.setItem('alias', nom);
+        
+        // Guardamos la configuración del modo elegido
+        let config = JSON.parse(sessionStorage.getItem('config')) || {};
+        config.mode = modo; 
+        sessionStorage.setItem('config', JSON.stringify(config));
+        
+        sessionStorage.removeItem('load');
+        window.location.assign("./html/game.html");
+    }
+
+    document.getElementById('btn-mode1').addEventListener('click', () => iniciarJuego(1));
+    document.getElementById('btn-mode2').addEventListener('click', () => iniciarJuego(2));
+	
+	
+	// Lógica para Jugar
+    document.getElementById('play').addEventListener('click', function(){
+        // El enunciado pide usar un alias al iniciar (punto 4.a.ii)
+        var nom = prompt("Quin es el teu nom?");
+        if (nom) sessionStorage.setItem('alias', nom);
+        
+        sessionStorage.removeItem('load');
         window.location.assign("./html/game.html");
     });
 
-    $('#options').on('click', function(){
-        console.error("Opció no implementada");
+    // Lógica para Opciones
+    document.getElementById('options').addEventListener('click', function(){
+        window.location.assign("./html/options.html");
     });
 
-    $('#saves').on('click', function(){
-        console.error("Opció no implementada");
+    // Lógica para Cargar (Punto 4.c - Guardar en local, no PHP)
+    document.getElementById('saves').addEventListener('click', function(){
+        let to_load = localStorage.getItem('save'); // Usamos local ya que no hay PHP 
+
+        if (!to_load) {
+            alert("No hi ha cap partida a carregar");
+            return;
+        }
+        sessionStorage.load = to_load;
+        window.location.assign("./html/game.html");
     });
 
-    $('#exit').on('click', function(){
-        console.warn("No es pot sortir!");
+    // Lógica para Salir (opcional)
+    document.getElementById('exit').addEventListener('click', function(){
+        if (confirm("Vols sortir de la página?")) {
+             window.close();
+        }
     });
 });
