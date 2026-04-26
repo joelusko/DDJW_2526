@@ -217,19 +217,27 @@ export var game = {
 		this.lastCards = [];
 	},
     save: function(){
-        let to_save = JSON.stringify({
+        let current_save = {
+            date: new Date().toLocaleString(),
             items: this.items,
             states: this.states,
             lastCards: this.lastCards,
             score: this.score,
             groupsOfCards: this.groupsOfCards,
-			level: this.level,
-			groupSize: this.groupSize,
-        });
+            level: this.level,
+            groupSize: this.groupSize,
+            mode: this.mode
+        };
         
-        localStorage.setItem('save', to_save);
-        console.warn("La partida s'ha guardat en local.");
-        window.location.assign("../");
+        let savedGames = JSON.parse(localStorage.getItem('savedGames') || "[]");
+        
+        savedGames.push(current_save);
+        
+        localStorage.setItem('savedGames', JSON.stringify(savedGames));
+        
+        console.warn("La partida s'ha guardat a l'historial.");
+        alert("Partida guardada correctament!");
+        window.location.assign("../index.html");
     }
 }
 
