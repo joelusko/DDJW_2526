@@ -56,4 +56,3 @@ addEventListener('load', function() {
              window.location.href = "about:blank";
         }
     });
-});
