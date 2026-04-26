@@ -31,6 +31,8 @@ addEventListener('load', function() {
 
     document.getElementById('play-m1').addEventListener('click', () => iniciarJuego(1));
     document.getElementById('play-m2').addEventListener('click', () => iniciarJuego(2));
+	
+    });
 
     // Lógica para Opciones
     document.getElementById('options').addEventListener('click', function(){

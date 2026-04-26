@@ -57,15 +57,17 @@ export var game = {
 	
 	setupUI: function(){
 		const gameDiv = document.getElementById('ui-info');
+
+        if (!this.timeDisplay) {
+            this.timeDisplay = document.createElement('div');
+            this.timeDisplay.style.fontSize = "20px";
+            this.timeDisplay.style.fontWeight = "bold";
+            this.timeDisplay.style.marginBottom = "10px";
+            this.timeDisplay.style.color = "red";
+            gameDiv.insertBefore(this.timeDisplay, gameDiv.firstChild);
+        }
 		
-		this.timeDisplay = document.createElement('div');
-		this.timeDisplay.style.fontSize = "20px";
-		this.timeDisplay.style.fontWeight = "bold";
-		this.timeDisplay.style.marginBottom = "10px";
-		this.timeDisplay.style.color = "red";
 		this.timeDisplay.innerText = `Tiempo: ${this.timer}s | Puntos: ${this.score}`;
-		
-		gameDiv.insertBefore(this.timeDisplay, gameDiv.firstChild);
 	},
 	
 	updateUI: function(){
