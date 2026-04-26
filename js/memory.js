@@ -103,12 +103,12 @@ export var game = {
         }
         else{ // Nova partida
             let config = JSON.parse(sessionStorage.getItem('config'));
-			
+
 			if(config){
-				this.mode = config.mode;
-				this.groupSize = config.groupSize;
-				this.maxGroups = config.maxGroups;
-			}
+				this.mode = config.mode || this.mode;
+				this.groupSize = config.groupSize || this.groupSize; 
+				this.maxGroups = config.maxGroups || this.maxGroups;
+}
 			
 			this.items = resources.slice();          
             shuffle(this.items);
