@@ -31,7 +31,6 @@ function drawSVGCard(x, y, path) {
     if (img.complete && img.naturalWidth !== 0) {
         ctx.drawImage(img, x, y, cardWidth, cardHeight);
     } else {
-        // DEBUG visual
         ctx.strokeStyle = "red";
         ctx.strokeRect(x, y, cardWidth, cardHeight);
     }

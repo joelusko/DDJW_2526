@@ -126,7 +126,7 @@ export var game = {
             this.items = totalCards;
             shuffle(this.items);
             
-            this.groupsOfCards = numGroups; // Actualizamos cuántos grupos hay que encontrar
+            this.groupsOfCards = numGroups;
             this.states = new Array(this.items.length).fill(StateCard.ENABLE);
         }
     },
@@ -142,11 +142,11 @@ export var game = {
 		}
 		else if (this.level > 3 && this.groupSize < 3) {
             this.groupSize = 3;
-            this.maxGroups = 3; // Bajamos grupos al cambiar a tríos para no saturar
+            this.maxGroups = 3; 
         }
 		else if (this.level > 6 && this.groupSize < 4) {
             this.groupSize = 4;
-            this.maxGroups = 3; // Cuartetos es MUY difícil
+            this.maxGroups = 3; 
         }
 		
 		alert(`¡Nivel ${this.level}!`);
