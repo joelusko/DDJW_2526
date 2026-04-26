@@ -63,5 +63,5 @@ canvas.addEventListener('click', (event) => {
         }
     });
 });
-
+startGame();
 requestAnimationFrame(render);
