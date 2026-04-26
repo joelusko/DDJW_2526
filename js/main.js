@@ -32,15 +32,6 @@ addEventListener('load', function() {
     document.getElementById('play-m1').addEventListener('click', () => iniciarJuego(1));
     document.getElementById('play-m2').addEventListener('click', () => iniciarJuego(2));
 	
-	
-	// Lógica para Jugar
-    document.getElementById('play').addEventListener('click', function(){
-        // El enunciado pide usar un alias al iniciar (punto 4.a.ii)
-        var nom = prompt("Quin es el teu nom?");
-        if (nom) sessionStorage.setItem('alias', nom);
-        
-        sessionStorage.removeItem('load');
-        window.location.assign("./html/game.html");
     });
 
     // Lógica para Opciones
