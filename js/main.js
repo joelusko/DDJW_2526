@@ -38,10 +38,10 @@ addEventListener('load', function() {
     document.getElementById('saves').addEventListener('click', function(){
         window.location.assign("./html/load.html");
     });
-¡
+
     document.getElementById('exit').addEventListener('click', function(){
         if (confirm("Vols sortir de la página?")) {
              window.location.href = "about:blank";
         }
     });
-}); /
+});
