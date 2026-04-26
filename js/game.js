@@ -13,7 +13,7 @@ const imageCache = {};
 function drawSVGCard(x, y, path) {
     if (!imageCache[path]) {
         const img = new Image();
-        img.onload = () => { /* Forzar render cuando cargue la imagen */ };
+        img.onload = () => {render();};
         img.src = path;
         imageCache[path] = img;
     }
