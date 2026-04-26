@@ -13,16 +13,26 @@ const imageCache = {};
 function drawSVGCard(x, y, path) {
     if (!imageCache[path]) {
         const img = new Image();
-        img.onload = () => {render();};
+        
+        img.onload = () => {
+            render();
+        };
+
+        img.onerror = () => {
+            console.error("Error cargando imagen:", path);
+        };
+
         img.src = path;
         imageCache[path] = img;
     }
 
     const img = imageCache[path];
+
     if (img.complete && img.naturalWidth !== 0) {
         ctx.drawImage(img, x, y, cardWidth, cardHeight);
     } else {
-        ctx.strokeStyle = "white";
+        // DEBUG visual
+        ctx.strokeStyle = "red";
         ctx.strokeRect(x, y, cardWidth, cardHeight);
     }
 }
