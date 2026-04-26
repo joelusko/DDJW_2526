@@ -1,46 +1,41 @@
-<!DOCTYPE html>
-<html lang="ca">
-<head>
-    <meta charset="UTF-8">
-    <title>Memory - Opcions</title>
-    <script src="../js/options.js" type="module"></script>
-    <style>
-        body { background-color: #222; color: white; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-        .config-container { background-color: #333; padding: 30px; border-radius: 10px; width: 400px; text-align: center; }
-        select, button { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: none; font-weight: bold; }
-        .btn-save { background-color: #4CAF50; color: white; cursor: pointer; }
-        .btn-back { background-color: #555; color: white; cursor: pointer; }
-        .hidden { display: none; } /* Para ocultar opciones según el modo */
-    </style>
-</head>
-<body>
-    <div class="config-container">
-        <h1>Configuració</h1>
+document.addEventListener('DOMContentLoaded', () => {
+    const modeSelect = document.getElementById('mode-select');
+    const extraMode2 = document.getElementById('extra-mode2');
+    const groupSizeSelect = document.getElementById('group-size');
+    const startLevelSelect = document.getElementById('start-level');
+    const saveBtn = document.getElementById('save-config');
+    const backBtn = document.getElementById('back-menu');
 
-        <label for="mode-select">Mode de Joc:</label>
-        <select id="mode-select">
-            <option value="1">Modo 1 (Nivell Únic)</option>
-            <option value="2">Modo 2 (Progressiu)</option>
-        </select>
+    // 1. Cargar configuración previa si existe
+    let config = JSON.parse(sessionStorage.getItem('config')) || { mode: 1, groupSize: 2, level: 1 };
+    
+    modeSelect.value = config.mode;
+    groupSizeSelect.value = config.groupSize || 2;
+    startLevelSelect.value = config.level || 1;
 
-        <label for="group-size">Mida del grup (Parelles, trios...):</label>
-        <select id="group-size">
-            <option value="2">Parelles (2)</option>
-            <option value="3">Trios (3)</option>
-            <option value="4">Quartets (4)</option>
-        </select>
+    // Función para mostrar/ocultar opciones según el modo (Requisito 4.a.iii)
+    function updateUI() {
+        if (modeSelect.value == "2") {
+            extraMode2.classList.remove('hidden');
+        } else {
+            extraMode2.classList.add('hidden');
+        }
+    }
 
-        <div id="extra-mode2" class="hidden">
-            <label for="start-level">Nivell inicial (Modo 2):</label>
-            <select id="start-level">
-                <option value="1">Nivell 1</option>
-                <option value="2">Nivell 2</option>
-                <option value="3">Nivell 3</option>
-            </select>
-        </div>
+    modeSelect.addEventListener('change', updateUI);
+    updateUI(); // Ejecutar al cargar
 
-        <button id="save-config" class="btn-save">Guardar Configuració</button>
-        <button id="back-menu" class="btn-back">Tornar al Menú</button>
-    </div>
-</body>
-</html>
+    // 2. Guardar al hacer clic
+    saveBtn.addEventListener('click', () => {
+        config.mode = parseInt(modeSelect.value);
+        config.groupSize = parseInt(groupSizeSelect.value);
+        config.level = parseInt(startLevelSelect.value);
+
+        sessionStorage.setItem('config', JSON.stringify(config));
+        alert("Configuració guardada correctament!");
+    });
+
+    backBtn.addEventListener('click', () => {
+        window.location.assign("../index.html");
+    });
+});
