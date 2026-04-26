@@ -29,8 +29,8 @@ addEventListener('load', function() {
         window.location.assign("./html/game.html");
     }
 
-    document.getElementById('btn-mode1').addEventListener('click', () => iniciarJuego(1));
-    document.getElementById('btn-mode2').addEventListener('click', () => iniciarJuego(2));
+    document.getElementById('play-m1').addEventListener('click', () => iniciarJuego(1));
+    document.getElementById('play-m2').addEventListener('click', () => iniciarJuego(2));
 	
 	
 	// Lógica para Jugar
@@ -48,9 +48,8 @@ addEventListener('load', function() {
         window.location.assign("./html/options.html");
     });
 
-    // Lógica para Cargar (Punto 4.c - Guardar en local, no PHP)
     document.getElementById('saves').addEventListener('click', function(){
-        let to_load = localStorage.getItem('save'); // Usamos local ya que no hay PHP 
+        let to_load = localStorage.getItem('save');
 
         if (!to_load) {
             alert("No hi ha cap partida a carregar");

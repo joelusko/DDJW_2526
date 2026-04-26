@@ -1,7 +1,7 @@
-const resources = ['../resources/cb.png', '../resources/co.png',
-                '../resources/sb.png', '../resources/so.png',
-                '../resources/tb.png', '../resources/to.png'];
-const back = '../resources/back.png';
+const resources = ['../resources/circulo.svg', '../resources/cuadrado.svg',
+                '../resources/estrella.svg', '../resources/exagono.svg',
+                '../resources/pentagono.svg', '../resources/triangulo.svg'];
+const back = '../resources/back.svg';
 
 const StateCard = Object.freeze({
   DISABLE: 0,
@@ -9,7 +9,7 @@ const StateCard = Object.freeze({
   DONE: 2
 });
 
-var game = {
+export var game = {
     
 	timer: 120,
 	timerInterval: null,
@@ -56,7 +56,7 @@ var game = {
 	},
 	
 	setupUI: function(){
-		const gameDiv = document.getElementById('game');
+		const gameDiv = document.getElementById('');
 		
 		this.timeDisplay = document.createElement('div');
 		this.timeDisplay.style.fontSize = "20px";
@@ -225,7 +225,6 @@ var game = {
 			groupSize: this.groupSize,
         });
         
-        // Segons punt 4.c.iii: "S'ha de guardar en local, no cal fer PHP"
         localStorage.setItem('save', to_save);
         console.warn("La partida s'ha guardat en local.");
         window.location.assign("../");
@@ -236,7 +235,6 @@ function shuffe(arr){
     arr.sort(function () {return Math.random() - 0.5});
 }
 
-// Exports per a la interfície de Canvas
 export var gameItems;
 export function selectCards() { 
     game.select();
