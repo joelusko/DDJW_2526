@@ -10,7 +10,16 @@ const StateCard = Object.freeze({
 });
 
 var game = {
-    items: [],
+    
+	timer: 120,
+	timerInterval: null,
+	timerDisplay: null,
+	
+	level: 1,
+	maxGroups: 2, 
+	mode: 1,
+	
+	items: [],
     states: [],
     setValue: null,
     ready: 0,
@@ -18,7 +27,8 @@ var game = {
     score: 200,
     groupsOfCards: 2, //Redefino la variable "pairs" para adaptarla a que ahora pueden haber grupos de distintos tamaños
 	groupSize: 2, //Lo creo para poder tener diferentes medidas de grupo, de base es 2 para las parejas
-    goBack: function(idx){
+    
+	goBack: function(idx){
         this.setValue && this.setValue[idx](back);
         this.states[idx] = StateCard.ENABLE;
     },
@@ -26,21 +36,84 @@ var game = {
         this.setValue && this.setValue[idx](this.items[idx]);
         this.states[idx] = StateCard.DISABLE;
     },
+	
+	saveScore: function(){
+		if (this.timerInterval) {
+        clearInterval(this.timerInterval);
+        this.timerInterval = null; // Limpiamos la referencia
+		}
+		
+		let name = prompt(`¡Partida terminada! Puntos: ${this.score} Introduce tu nombre para el ranking:`);
+		if (!name) name = "Anónimo";
+		
+		let ranking = JSON.parse(localStorage.getItem('ranking') || "[]");
+		ranking.push({user: name, points: this.score, level: this.level});
+		
+		ranking.sort((a, b) => b.points - a.points);
+		ranking = ranking.slice(0, 10);
+		
+		localStorage.setItem('ranking', JSON.stringify(ranking));
+	},
+	
+	setupUI: function(){
+		const gameDiv = document.getElementById('game');
+		
+		this.timeDisplay = document.createElement('div');
+		this.timeDisplay.style.fontSize = "20px";
+		this.timeDisplay.style.fontWeight = "bold";
+		this.timeDisplay.style.marginBottom = "10px";
+		this.timeDisplay.style.color = "red";
+		this.timeDisplay.innerText = `Tiempo: ${this.timer}s | Puntos: ${this.score}`;
+		
+		gameDiv.insertBefore(this.timeDisplay, gameDiv.firstChild);
+	},
+	
+	updateUI: function(){
+		if (this.timeDisplay) {
+            this.timeDisplay.innerText = `Tiempo: ${this.timer}s | Puntos: ${this.score}`;
+        }
+	},
+	
+	startTimer: function() {
+        if (this.timerInterval) clearInterval(this.timerInterval);
+        
+        this.timerInterval = setInterval(() => {
+            this.timer--;
+            this.updateUI(); // Actualizamos el texto en cada segundo
+
+            if (this.timer <= 0) {
+                clearInterval(this.timerInterval);
+                alert("¡Tiempo agotado!");
+                this.saveScore();
+                window.location.assign("../");
+            }
+        }, 1000);
+    },
+	
     select: function(){
-        if (sessionStorage.load){ // Carreguem partida
+        this.setupUI();
+		if (sessionStorage.load){ // Carreguem partida
             let toLoad = JSON.parse(sessionStorage.load);
             this.items = toLoad.items;
             this.states = toLoad.states;
-            this.lastCard = toLoad.lastCard;
+            this.lastCards = toLoad.lastCards;
             this.score = toLoad.score;
-            this.pairs = toLoad.pairs;
+            this.groupsOfCards = toLoad.groupsOfCards;
             sessionStorage.removeItem('load'); // Netegem per no recarregar sempre el mateix
         }
         else{ // Nova partida
-            this.items = resources.slice();          
+            let config = JSON.parse(sessionStorage.getItem('config'));
+			
+			if(config){
+				this.mode = config.mode;
+				this.groupSize = config.groupSize;
+				this.maxGroups = config.maxGroups;
+			}
+			
+			this.items = resources.slice();          
             shuffe(this.items);
 
-			let numGroups = 2; //Se inicializa en 2 para las parejas
+			let numGroups = this.maxGroups;
             this.items = this.items.slice(0, numGroups);
 			
 			let totalCards = []; //Creo un array temporal para almacenar todas las cartas que contendrá la partida
@@ -55,6 +128,30 @@ var game = {
             this.states = new Array(this.items.length).fill(StateCard.ENABLE);
         }
     },
+	
+	nextLevel: function(){
+		this.level++;
+		this.timer += 30;
+		this.ready = 0;
+		this.updateUI();
+		
+		if (this.maxGroups < 6) {
+            this.maxGroups++;
+		}
+		else if (this.level > 3 && this.groupSize < 3) {
+            this.groupSize = 3;
+            this.maxGroups = 3; // Bajamos grupos al cambiar a tríos para no saturar
+        }
+		else if (this.level > 6 && this.groupSize < 4) {
+            this.groupSize = 4;
+            this.maxGroups = 3; // Cuartetos es MUY difícil
+        }
+		
+		alert(`¡Nivel ${this.level}!`);
+		
+		this.select();
+		this.start();
+	},
     start: function(){
         this.items.forEach((_,indx)=>{
             if (this.states[indx] === StateCard.DISABLE ||
@@ -68,6 +165,7 @@ var game = {
                 }, 1000 + 100 * indx);
             }
         });
+		this.startTimer();
     },
     click: function(indx){
         if (this.states[indx] !== StateCard.ENABLE || this.ready < this.items.length) return;
@@ -80,13 +178,25 @@ var game = {
     
 		if(allMatch){
 			this.groupsOfCards-- //Hay un grupo menos que encontrar
+			this.score += 50;
+			this.timer += 10;
+			this.updateUI();
 			this.lastCards.forEach(i => this.states[i] = StateCard.DONE); //Marca todas las cartas clickadas por el jugador como resueltas
 	
 			if (this.groupsOfCards <= 0) {
-                alert(`Has ganado con ${this.score} puntos!`);
-                window.location.assign("../");
+				if(this.mode === 1){ //MODO 1, acaba la partida
+					alert(`Has ganado con ${this.score} puntos!`);
+					window.location.assign("../");
+				} else { //MODO 2, salta al siguiente nivel
+					setTimeout(() => {
+						this.nextLevel();
+					}, 500);
+				}
 			}
+			
 		} else {
+			this.score -= 25;
+			this.updateUI();
 			this.ready = 0;
 			let cardsToFlipBack = [...this.lastCards]; //Crea una copia de las cartas clickadas
 			
@@ -108,9 +218,11 @@ var game = {
         let to_save = JSON.stringify({
             items: this.items,
             states: this.states,
-            lastCard: this.lastCard,
+            lastCards: this.lastCards,
             score: this.score,
-            pairs: this.pairs
+            groupsOfCards: this.groupsOfCards,
+			level: this.level,
+			groupSize: this.groupSize,
         });
         
         // Segons punt 4.c.iii: "S'ha de guardar en local, no cal fer PHP"
